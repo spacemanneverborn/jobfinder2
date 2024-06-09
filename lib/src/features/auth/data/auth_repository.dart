@@ -8,7 +8,7 @@ class AuthRepository {
     try {
       await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException catch (e) {
-      // Handle specific Firebase Auth errors
+      print('FirebaseAuthException: ${e.code} - ${e.message}');
       switch (e.code) {
         case 'email-already-in-use':
           throw AuthException('The email address is already in use by another account.');
@@ -22,7 +22,7 @@ class AuthRepository {
           throw AuthException('An undefined error occurred.');
       }
     } catch (e) {
-      // Handle any other errors
+      print('Unexpected error: $e');
       throw AuthException('An error occurred during sign-up. Please try again.');
     }
   }
@@ -32,7 +32,7 @@ class AuthRepository {
     try {
       await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException catch (e) {
-      // Handle specific Firebase Auth errors
+      print('FirebaseAuthException: ${e.code} - ${e.message}');
       switch (e.code) {
         case 'invalid-email':
           throw AuthException('The email address is not valid.');
@@ -46,7 +46,7 @@ class AuthRepository {
           throw AuthException('An undefined error occurred.');
       }
     } catch (e) {
-      // Handle any other errors
+      print('Unexpected error: $e');
       throw AuthException('An error occurred during login. Please try again.');
     }
   }
@@ -56,7 +56,7 @@ class AuthRepository {
     try {
       await _firebaseAuth.sendPasswordResetEmail(email: email);
     } on FirebaseAuthException catch (e) {
-      // Handle specific Firebase Auth errors
+      print('FirebaseAuthException: ${e.code} - ${e.message}');
       switch (e.code) {
         case 'invalid-email':
           throw AuthException('The email address is not valid.');
@@ -66,13 +66,12 @@ class AuthRepository {
           throw AuthException('An undefined error occurred.');
       }
     } catch (e) {
-      // Handle any other errors
+      print('Unexpected error: $e');
       throw AuthException('An error occurred while sending the password reset email. Please try again.');
     }
   }
 }
 
-// Custom Exception Class for Authentication Errors
 class AuthException implements Exception {
   final String message;
   AuthException(this.message);

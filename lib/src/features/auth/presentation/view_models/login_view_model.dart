@@ -17,13 +17,18 @@ class LoginViewModel extends ChangeNotifier {
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
+  bool _loginSuccess = false;
+  bool get loginSuccess => _loginSuccess;
+
   Future<void> login() async {
     _isLoading = true;
     _errorMessage = null;
+    _loginSuccess = false;
     notifyListeners();
 
     try {
       await _authUseCase.logIn(emailController.text, passwordController.text);
+      _loginSuccess = true;
     } on auth_exc.AuthException catch (e) {
       _errorMessage = e.message;
     } catch (e) {

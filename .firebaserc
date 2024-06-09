@@ -1,0 +1,10 @@
+{
+  "projects": {
+    "default": "jobfinder2-d90af"
+  },
+  "dataconnectEmulatorConfig": {
+    "postgres": {
+      "localConnectionString": "postgresql://localhost:5432?sslmode=disable"
+    }
+  }
+}
