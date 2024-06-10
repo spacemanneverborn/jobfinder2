@@ -1,7 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
+// lib/main.dart
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:jobfinder2/src/features/profile/presentation/view_models/profile_view_model.dart';
 import 'package:provider/provider.dart';
 import 'src/features/auth/presentation/views/login_view.dart';
 import 'src/features/auth/presentation/views/register_view.dart';
@@ -11,6 +14,9 @@ import 'src/features/auth/presentation/view_models/register_view_model.dart';
 import 'src/features/auth/presentation/view_models/forgot_password_view_model.dart';
 import 'src/features/auth/domain/auth_use_case.dart';
 import 'src/features/auth/data/auth_repository.dart';
+import 'src/features/profile/domain/usecases/get_user_profile.dart';
+import 'src/features/profile/domain/usecases/update_user_profile.dart';
+import 'src/features/profile/data/repositories/profile_repository.dart';
 import 'routes.dart';
 
 Future<void> main() async {
@@ -52,6 +58,12 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => ForgotPasswordViewModel(authUseCase),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ProfileViewModel(
+            getUserProfile: GetUserProfile(ProfileRepository()),
+            updateUserProfile: UpdateUserProfile(ProfileRepository()),
+          ),
         ),
       ],
       child: MaterialApp(

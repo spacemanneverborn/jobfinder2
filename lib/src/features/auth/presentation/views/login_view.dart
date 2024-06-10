@@ -1,22 +1,37 @@
+// lib/src/features/auth/presentation/views/login_view.dart
+// lib/src/features/auth/presentation/views/login_view.dart
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:jobfinder2/src/features/profile/data/repositories/profile_repository.dart';
+import 'package:jobfinder2/src/features/profile/domain/usecases/get_user_profile.dart';
+import 'package:jobfinder2/src/features/profile/domain/usecases/update_user_profile.dart';
+import 'package:jobfinder2/src/features/profile/presentation/view_models/profile_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:jobfinder2/src/features/auth/presentation/view_models/login_view_model.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:jobfinder2/test.dart'; // Ensure this import is correct
+import 'package:jobfinder2/src/features/profile/presentation/views/profile_view.dart';
 
 class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<LoginViewModel>(context);
+
     // Listen for login success and navigate
-    if (viewModel.loginSuccess) {
+    if (viewModel.user != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (_) => FirestoreExample(), // Replace with your actual widget
+          builder: (_) => ChangeNotifierProvider(
+            create: (context) => ProfileViewModel(
+              getUserProfile: GetUserProfile(ProfileRepository()),
+              updateUserProfile: UpdateUserProfile(ProfileRepository()),
+            ),
+            child: ProfileView(),
+          ),
         ));
       });
     }
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
